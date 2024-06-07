@@ -61,7 +61,7 @@ async function emitCommonTypesSwagger(name: string) {
 
     const versionDir = resolve(outDir, version.version);
     await mkdir(versionDir, { recursive: true });
-    const outputFile = resolve(versionDir, `${name}.json`);
+    const outputFile = resolve(versionDir, `${name.replaceAll("-", "")}.json`);
     await writeFile(outputFile, JSON.stringify(sortedDocument, null, 2), { encoding: "utf-8" });
   }
 
