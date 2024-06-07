@@ -5,11 +5,8 @@ using OpenAPI;
 
 namespace Azure.ResourceManager.CommonTypes;
 
-@@extension(OperationIdParameter, "x-ms-parameter-location", "method");
-
-@@extension(ResourceGroupNameParameter, "x-ms-parameter-location", "method");
-
-@@extension(LocationParameter, "x-ms-parameter-location", "method");
+@@extension(ApiVersionParameter.apiVersion, "x-ms-parameter-location", "client");
+@@extension(SubscriptionIdParameter.subscriptionId, "x-ms-parameter-location", "client");
 
 op registerParams(
   ...ApiVersionParameter,
