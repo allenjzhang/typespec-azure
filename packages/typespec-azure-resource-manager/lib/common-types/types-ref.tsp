@@ -259,3 +259,16 @@ namespace Azure.ResourceManager.CommonTypes;
 @@resourceParameterBaseFor(SubscriptionIdParameter.subscriptionId,
   [ResourceHome.ResourceGroup, ResourceHome.Subscription, ResourceHome.Location]
 );
+
+@@armCommonDefinition(ErrorResponse,
+  "ErrorResponse",
+  Azure.ResourceManager.CommonTypes.Versions.v3
+);
+@@armCommonDefinition(ErrorResponse,
+  "ErrorResponse",
+  Azure.ResourceManager.CommonTypes.Versions.v4
+);
+@@armCommonDefinition(ErrorResponse,
+  "ErrorResponse",
+  Azure.ResourceManager.CommonTypes.Versions.v5
+);

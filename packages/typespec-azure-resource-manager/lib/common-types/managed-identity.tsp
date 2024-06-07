@@ -23,20 +23,21 @@ model ManagedServiceIdentity {
   type: ManagedServiceIdentityType;
 
   /** The identities assigned to this resource by the user. */
-  userAssignedIdentities?: Record<UserAssignedIdentity>;
+  @typeChangedFrom(Versions.v5, Record<UserAssignedIdentity>)
+  userAssignedIdentities?: Record<UserAssignedIdentity> | null;
 }
 
 /**
  * Managed service identity (either system assigned, or none)
  */
 model SystemAssignedServiceIdentity {
-  /** The tenant ID of the system assigned identity. This property will only be provided for a system assigned identity. */
-  @visibility("read")
-  tenantId?: uuid;
-
   /** The service principal ID of the system assigned identity. This property will only be provided for a system assigned identity. */
   @visibility("read")
   principalId?: uuid;
+
+  /** The tenant ID of the system assigned identity. This property will only be provided for a system assigned identity. */
+  @visibility("read")
+  tenantId?: uuid;
 
   /** The type of managed identity assigned to this resource. */
   type: SystemAssignedServiceIdentityType;
@@ -56,9 +57,8 @@ model UserAssignedIdentity {
 }
 
 /**
- * The kind of managed identity assigned to this resource.
+ * Type of managed service identity (where both SystemAssigned and UserAssigned types are allowed).
  */
-/** Type of managed service identity (where both SystemAssigned and UserAssigned types are allowed). */
 union ManagedServiceIdentityType {
   /** No managed identity. */
   None: "None",
@@ -76,7 +76,13 @@ union ManagedServiceIdentityType {
 
   /** System and user assigned managed identity. */
   @added(Versions.v4)
-  SystemAndUserAssigned: "SystemAssigned, UserAssigned",
+  @renamedFrom(Versions.v4, "SystemAndUserAssigned")
+  @removed(Versions.v5)
+  SystemAndUserAssignedV4: "SystemAssigned, UserAssigned",
+
+  /** System and user assigned managed identity. */
+  @added(Versions.v5)
+  SystemAndUserAssigned: "SystemAssigned,UserAssigned",
 
   string,
 }
