@@ -5,12 +5,13 @@ import "@typespec/openapi";
 import "../../node_modules/@azure-tools/typespec-azure-resource-manager/lib/common-types/versions.tsp";
 
 using Versioning;
+using Http;
 
 @service({
   title: "Common types",
 })
 namespace Azure.ResourceManager.CommonTypes {
-  op dummy(): void;
+  @route("dummy") op dummy(): void;
 }
 
 @versioned(Azure.ResourceManager.Versions)

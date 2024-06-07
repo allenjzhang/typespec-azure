@@ -10,3 +10,14 @@ namespace Azure.ResourceManager.CommonTypes;
 @@extension(ResourceGroupNameParameter, "x-ms-parameter-location", "method");
 
 @@extension(LocationParameter, "x-ms-parameter-location", "method");
+
+op registerParams(
+  ...ApiVersionParameter,
+  ...LocationParameter,
+  ...ManagementGroupNameParameter,
+  ...OperationIdParameter,
+  ...ResourceGroupNameParameter,
+  ...ScopeParameter,
+  ...SubscriptionIdParameter,
+  ...TenantIdParameter,
+): void;

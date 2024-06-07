@@ -5,12 +5,14 @@ import {
   sortOpenAPIDocument,
 } from "@azure-tools/typespec-autorest";
 import { NodeHost, compile, logDiagnostics } from "@typespec/compiler";
-import { mkdir, writeFile } from "fs/promises";
+import { mkdir, rm, writeFile } from "fs/promises";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const dir = dirname(fileURLToPath(import.meta.url));
+const outDir = resolve(dir, "openapi");
 
+await rm(outDir, { recursive: true, force: true });
 await emitCommonTypesSwagger("customer-managed-keys");
 await emitCommonTypesSwagger("managed-identity");
 await emitCommonTypesSwagger("private-links");
@@ -57,9 +59,9 @@ async function emitCommonTypesSwagger(name: string) {
     const cleanedDocument = cleanupDocument(document);
     const sortedDocument = sortOpenAPIDocument(cleanedDocument);
 
-    const versionDir = resolve(dir, `openapi/${version.version}`);
+    const versionDir = resolve(outDir, version.version);
     await mkdir(versionDir, { recursive: true });
-    const outputFile = resolve(dir, `openapi/${version.version}/${name}.json`);
+    const outputFile = resolve(versionDir, `${name}.json`);
     await writeFile(outputFile, JSON.stringify(sortedDocument, null, 2), { encoding: "utf-8" });
   }
 
