@@ -1,4 +1,5 @@
 import {
+  OpenAPI2Document,
   getAllServicesAtAllVersions,
   resolveAutorestOptions,
   sortOpenAPIDocument,
@@ -53,19 +54,48 @@ async function emitCommonTypesSwagger(name: string) {
       continue; // we don't save this file
     }
 
-    delete document.schemes;
-    delete document.produces;
-    delete document.consumes;
-    delete document.tags;
-    delete document.info["x-typespec-generated"];
-    document.paths = {};
+    const cleanedDocument = cleanupDocument(document);
+    const sortedDocument = sortOpenAPIDocument(cleanedDocument);
 
     const versionDir = resolve(dir, `openapi/${version.version}`);
     await mkdir(versionDir, { recursive: true });
     const outputFile = resolve(dir, `openapi/${version.version}/${name}.json`);
-    const sortedDocument = sortOpenAPIDocument(document);
     await writeFile(outputFile, JSON.stringify(sortedDocument, null, 2), { encoding: "utf-8" });
   }
 
   log("  ✅ Generated common types for ", name);
+}
+
+function cleanupDocument(original: OpenAPI2Document): OpenAPI2Document {
+  const document: OpenAPI2Document = JSON.parse(JSON.stringify(original));
+
+  delete document.schemes;
+  delete document.produces;
+  delete document.consumes;
+  delete document.tags;
+  delete document.info["x-typespec-generated"];
+  if (document.parameters && Object.keys(document.parameters).length === 0) {
+    delete document.parameters;
+  }
+  document.paths = {};
+
+  replaceUuidRefs(document);
+
+  return document;
+}
+
+function replaceUuidRefs(document: OpenAPI2Document) {
+  if (document.definitions?.["Azure.Core.uuid"]) {
+    const uuidDef = document.definitions["Azure.Core.uuid"];
+    delete document.definitions["Azure.Core.uuid"];
+
+    for (const definition of Object.values(document.definitions)) {
+      for (const property of Object.values(definition.properties || {})) {
+        if ("$ref" in property && property.$ref === "#/definitions/Azure.Core.uuid") {
+          delete (property as any).$ref;
+          Object.assign(property, { ...uuidDef, ...property });
+        }
+      }
+    }
+  }
 }

@@ -38,11 +38,6 @@
         "apiVersion"
       ]
     },
-    "Azure.Core.uuid": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Universally Unique Identifier"
-    },
     "AzureEntityResource": {
       "type": "object",
       "description": "The resource model definition for an Azure Resource Manager resource with an etag.",
@@ -218,12 +213,14 @@
       "description": "Identity for the resource.",
       "properties": {
         "principalId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The principal ID of resource identity. The value must be an UUID.",
           "readOnly": true
         },
         "tenantId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The tenant ID of resource. The value must be an UUID.",
           "readOnly": true
         },
@@ -667,7 +664,8 @@
       "description": "The default subscriptionId parameter type.",
       "properties": {
         "subscriptionId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The ID of the target subscription.  The value must be an UUID."
         }
       },
@@ -718,7 +716,8 @@
       "description": "The default ManagementGroupName parameter type.",
       "properties": {
         "tenantId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The Azure tenant ID. This is a GUID-formatted string (e.g. 00000000-0000-0000-0000-000000000000)"
         }
       },
@@ -831,6 +830,5 @@
         "name"
       ]
     }
-  },
-  "parameters": {}
+  }
 }

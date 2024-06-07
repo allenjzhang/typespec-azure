@@ -6,22 +6,19 @@
   },
   "paths": {},
   "definitions": {
-    "Azure.Core.uuid": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Universally Unique Identifier"
-    },
     "ManagedServiceIdentity": {
       "type": "object",
       "description": "Managed service identity (system assigned and/or user assigned identities)",
       "properties": {
         "principalId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The service principal ID of the system assigned identity. This property will only be provided for a system assigned identity.",
           "readOnly": true
         },
         "tenantId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The tenant ID of the system assigned identity. This property will only be provided for a system assigned identity.",
           "readOnly": true
         },
@@ -83,12 +80,14 @@
       "description": "Managed service identity (either system assigned, or none)",
       "properties": {
         "principalId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The service principal ID of the system assigned identity. This property will only be provided for a system assigned identity.",
           "readOnly": true
         },
         "tenantId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The tenant ID of the system assigned identity. This property will only be provided for a system assigned identity.",
           "readOnly": true
         },
@@ -137,17 +136,18 @@
       "description": "User assigned identity properties",
       "properties": {
         "principalId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The principal ID of the assigned identity.",
           "readOnly": true
         },
         "clientId": {
-          "$ref": "#/definitions/Azure.Core.uuid",
+          "type": "string",
+          "format": "uuid",
           "description": "The client ID of the assigned identity.",
           "readOnly": true
         }
       }
     }
-  },
-  "parameters": {}
+  }
 }
