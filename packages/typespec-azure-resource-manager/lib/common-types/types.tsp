@@ -3,8 +3,6 @@ using TypeSpec.Rest;
 using TypeSpec.OpenAPI;
 using TypeSpec.Versioning;
 using Azure.Core;
-using Azure.ResourceManager.Private;
-using Azure.ResourceManager.CommonTypes.Private;
 
 namespace Azure.ResourceManager.CommonTypes;
 
@@ -428,15 +426,6 @@ model ApiVersionParameter {
   @query("api-version")
   @minLength(1)
   @doc("The API version to use for this operation.")
-  @resourceParameterBaseFor(
-    [
-      ResourceHome.ResourceGroup,
-      ResourceHome.Subscription,
-      ResourceHome.Location,
-      ResourceHome.Tenant,
-      ResourceHome.Extension
-    ]
-  )
   apiVersion: string;
 }
 
@@ -449,8 +438,5 @@ model SubscriptionIdParameter {
   @minLength(1)
   @segment("subscriptions")
   @doc("The ID of the target subscription.")
-  @resourceParameterBaseFor(
-    [ResourceHome.ResourceGroup, ResourceHome.Subscription, ResourceHome.Location]
-  )
   subscriptionId: string;
 }

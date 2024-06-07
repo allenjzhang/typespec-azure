@@ -4,7 +4,7 @@ using TypeSpec.Versioning;
 namespace Azure.ResourceManager.CommonTypes;
 
 /** (Optional) Discouraged to include in resource definition. Only needed where it is possible to disable platform (AKA infrastructure) encryption. Azure SQL TDE is an example of this. Values are enabled and disabled. */
-@added(CommonTypes.Versions.v4)
+@added(Versions.v4)
 union InfrastructureEncryption {
   /** Encryption is enabled */
   Enabled: "enabled",
@@ -15,11 +15,8 @@ union InfrastructureEncryption {
   string,
 }
 
-/** Alias of keyEncryptionKeyIdentity for back compatibility. Please change to keyEncryptionKeyIdentity. */
-alias KeyEncryptionIdentity = KeyEncryptionKeyIdentity;
-
 /** The type of identity to use. */
-@added(CommonTypes.Versions.v4)
+@added(Versions.v4)
 union KeyEncryptionKeyIdentity {
   /** System assigned identity */
   SystemAssignedIdentity: "systemAssignedIdentity",
@@ -34,7 +31,7 @@ union KeyEncryptionKeyIdentity {
 }
 
 /** Customer-managed key encryption properties for the resource. */
-@added(CommonTypes.Versions.v4)
+@added(Versions.v4)
 model CustomerManagedKeyEncryption {
   /** The type of identity to use. Values can be systemAssignedIdentity, userAssignedIdentity, or delegatedResourceIdentity. */
   keyEncryptionKeyIdentity?: KeyEncryptionKeyIdentity;
@@ -54,8 +51,8 @@ model CustomerManagedKeyEncryption {
 }
 
 /** All encryption configuration for a resource. */
-@added(CommonTypes.Versions.v4)
-model EncryptionConfiguration {
+@added(Versions.v4)
+model Encryption {
   /** Indicates if infrastructure encryption is enabled or disabled. */
   infrastructureEncryption?: InfrastructureEncryption;
 

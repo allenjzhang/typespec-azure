@@ -3,8 +3,8 @@ using TypeSpec.Versioning;
 
 namespace Azure.ResourceManager.CommonTypes;
 
-/** The private endpoint resource */
-@added(CommonTypes.Versions.v4)
+/** The Private Endpoint resource. */
+@added(CommonTypes.Versions.v3)
 model PrivateEndpoint {
   /** The resource identifier for private endpoint */
   id?: Azure.Core.armResourceIdentifier<[
@@ -15,14 +15,14 @@ model PrivateEndpoint {
 }
 
 /** The private endpoint connection resource */
-@added(CommonTypes.Versions.v4)
-model PrivateEndpointConnection extends Azure.ResourceManager.Foundations.ProxyResource {
+@added(CommonTypes.Versions.v3)
+model PrivateEndpointConnection extends Resource {
   /** The private endpoint connection properties */
   properties?: PrivateEndpointConnectionProperties;
 }
 
 /** Properties of he private endpoint connection resource */
-@added(CommonTypes.Versions.v4)
+@added(CommonTypes.Versions.v3)
 model PrivateEndpointConnectionProperties {
   /** The group identifiers for the private endpoint resource */
   @visibility("read")
@@ -39,7 +39,7 @@ model PrivateEndpointConnectionProperties {
 }
 
 /** A collection of information about the state of the connection between service consumer and provider. */
-@added(CommonTypes.Versions.v4)
+@added(CommonTypes.Versions.v3)
 model PrivateLinkServiceConnectionState {
   /** Indicates whether the connection has been Approved/Rejected/Removed by the owner of the service. */
   status?: PrivateEndpointServiceConnectionStatus;
@@ -51,20 +51,26 @@ model PrivateLinkServiceConnectionState {
   actionsRequired?: string;
 }
 
-/** The provisioning state of the connection */
-@added(CommonTypes.Versions.v4)
+/** The current provisioning state. */
+@added(CommonTypes.Versions.v3)
 union PrivateEndpointConnectionProvisioningState {
-  ResourceProvisioningState,
+  string,
+
+  /** Connection has been provisioned */
+  Succeeded: "Succeeded",
 
   /** Connection is being created */
   Creating: "Creating",
 
   /** Connection is being deleted */
   Deleting: "Deleting",
+
+  /** Connection provisioning has failed */
+  Failed: "Failed",
 }
 
 /** The private endpoint connection status */
-@added(CommonTypes.Versions.v4)
+@added(CommonTypes.Versions.v3)
 union PrivateEndpointServiceConnectionStatus {
   /** Connectionaiting for approval or rejection */
   Pending: "Pending",
@@ -82,20 +88,10 @@ union PrivateEndpointServiceConnectionStatus {
  * The name of the private endpoint connection associated with the Azure resource.
  * @template Segment The resource type name for private endpoint connections (default is privateEndpointConnections)
  */
-@added(CommonTypes.Versions.v4)
+@added(CommonTypes.Versions.v3)
 model PrivateEndpointConnectionParameter<Segment extends valueof string = "privateEndpointConnections"> {
   /** The name of the private endpoint connection associated with the Azure resource. */
   @path
-  @CommonTypes.Private.armCommonParameter(
-    "PrivateEndpointConnectionName",
-    #{ version: Azure.ResourceManager.CommonTypes.Versions.v4, isDefault: true },
-    "privatelinks.json"
-  )
-  @CommonTypes.Private.armCommonParameter(
-    "PrivateEndpointConnectionName",
-    Azure.ResourceManager.CommonTypes.Versions.v5,
-    "privatelinks.json"
-  )
   @TypeSpec.Rest.segment(Segment)
   @key("privateEndpointConnectionName")
   name: string;
@@ -105,7 +101,7 @@ model PrivateEndpointConnectionParameter<Segment extends valueof string = "priva
  * The name of the private link associated with the Azure resource.
  * @template Segment The resource type name for private links (default is privateLinkResources)
  */
-@added(CommonTypes.Versions.v4)
+@added(CommonTypes.Versions.v3)
 model PrivateLinkResourceParameter<Segment extends valueof string = "privateLinkResources"> {
   /** The name of the private link associated with the Azure resource. */
   @path
