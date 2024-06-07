@@ -4,20 +4,7 @@
     "title": "Common types",
     "version": "v4"
   },
-  "tags": [],
-  "paths": {
-    "/": {
-      "get": {
-        "operationId": "Dummy",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": "There is no content to send for this request, but the headers may be useful. "
-          }
-        }
-      }
-    }
-  },
+  "paths": {},
   "definitions": {
     "ActionType": {
       "type": "string",
@@ -279,7 +266,8 @@
       },
       "required": [
         "location"
-      ]
+      ],
+      "x-ms-parameter-location": "method"
     },
     "ManagementGroupNameParameter": {
       "type": "object",
@@ -360,7 +348,8 @@
       },
       "required": [
         "operationId"
-      ]
+      ],
+      "x-ms-parameter-location": "method"
     },
     "OperationListResult": {
       "type": "object",
@@ -545,7 +534,8 @@
       },
       "required": [
         "resourceGroupName"
-      ]
+      ],
+      "x-ms-parameter-location": "method"
     },
     "ResourceIdentityType": {
       "type": "string",

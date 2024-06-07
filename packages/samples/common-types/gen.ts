@@ -9,17 +9,25 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const dir = dirname(fileURLToPath(import.meta.url));
-const pkgRoot = dirname(dir);
 
 await emitCommonTypesSwagger("customer-managed-keys");
 await emitCommonTypesSwagger("managed-identity");
 await emitCommonTypesSwagger("private-links");
 await emitCommonTypesSwagger("types");
 
+function log(...args: any[]) {
+  // eslint-disable-next-line no-console
+  console.log(...args);
+}
+
 async function emitCommonTypesSwagger(name: string) {
-  const program = await compile(NodeHost, resolve(dir, "main.tsp"), {
-    additionalImports: [resolve(pkgRoot, `src/${name}.tsp`)],
-  });
+  log("Generating common types for ", name);
+  const program = await compile(NodeHost, resolve(dir, `src/${name}.tsp`));
+
+  if (program.diagnostics.length > 0) {
+    logDiagnostics(program.diagnostics, NodeHost.logSink);
+    process.exit(1);
+  }
 
   const output = await getAllServicesAtAllVersions(
     program,
@@ -29,7 +37,6 @@ async function emitCommonTypesSwagger(name: string) {
     logDiagnostics(program.diagnostics, NodeHost.logSink);
     process.exit(1);
   }
-  console.log("output", output);
 
   if (output.length !== 1) {
     throw new Error("Expected exactly one service");
@@ -49,6 +56,7 @@ async function emitCommonTypesSwagger(name: string) {
     delete document.schemes;
     delete document.produces;
     delete document.consumes;
+    delete document.tags;
     delete document.info["x-typespec-generated"];
     document.paths = {};
 
@@ -58,4 +66,6 @@ async function emitCommonTypesSwagger(name: string) {
     const sortedDocument = sortOpenAPIDocument(document);
     await writeFile(outputFile, JSON.stringify(sortedDocument, null, 2), { encoding: "utf-8" });
   }
+
+  log("  ✅ Generated common types for ", name);
 }

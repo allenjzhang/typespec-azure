@@ -4,20 +4,7 @@
     "title": "Common types",
     "version": "v5"
   },
-  "tags": [],
-  "paths": {
-    "/": {
-      "get": {
-        "operationId": "Dummy",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": "There is no content to send for this request, but the headers may be useful. "
-          }
-        }
-      }
-    }
-  },
+  "paths": {},
   "definitions": {
     "Azure.Core.uuid": {
       "type": "string",
