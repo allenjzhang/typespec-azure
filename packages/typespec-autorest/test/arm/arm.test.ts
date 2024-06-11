@@ -232,3 +232,51 @@ it("can use ResourceNameParameter for default name parameter definition", async 
   strictEqual(openapi.paths[privateEndpointGet].get.parameters[1].pattern, "^[a-zA-Z0-9-]{3,24}$");
   ok(openapi.paths[privateEndpointGet].get.parameters[1]);
 });
+
+it("can use @armCommonDefinition on Model, Model Property, and Union", async () => {
+  const openapi = await openApiFor(
+    `@useDependency(Azure.ResourceManager.Versions.v1_0_Preview_1)
+      @armProviderNamespace
+      namespace Microsoft.ArmCommonDefinitionTest;
+
+
+      /** A ContosoProviderHub resource */
+      model Employee is TrackedResource<EmployeeProperties> {
+        ...ResourceNameParameter<Employee>;
+      }
+      
+      /** Employee properties */
+      model EmployeeProperties {
+        @Azure.ResourceManager.Private.armCommonDefinition("TestProp", "v3", "types.json")
+        testProp: string;
+      
+        testMode: TestModel;
+        testEnum: TestEnum;
+        testUnion: TestUnion;
+        ...DefaultProvisioningStateProperty;
+      }
+      @armResourceOperations
+      interface Employees {
+        get is ArmResourceRead<Employee>;
+      }
+      
+      @Azure.ResourceManager.Private.armCommonDefinition("TestModel", "v3", "types.json")
+      model TestModel {}
+      
+      @Azure.ResourceManager.Private.armCommonDefinition("TestEnum", "v3", "types.json")
+      enum TestEnum {
+        a,
+        b,
+      }
+
+      @Azure.ResourceManager.Private.armCommonDefinition("TestUnion", "v3", "types.json")
+      union TestUnion {
+        string,
+        a: "a",
+        b: "b",
+      }
+      `
+  );
+
+  ok(openapi.definitions["EmployeeProperties"]);
+});

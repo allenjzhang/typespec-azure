@@ -29,7 +29,7 @@ alias ArmCommonTypeVersionSpec = {
  * @param referenceFile Reference file
  */
 extern dec armCommonDefinition(
-  target: Model,
+  target: Model | ModelProperty | Enum | Union,
   definitionName?: valueof string,
   version?: valueof EnumMember | ArmCommonTypeVersionSpec | string,
   referenceFile?: valueof string

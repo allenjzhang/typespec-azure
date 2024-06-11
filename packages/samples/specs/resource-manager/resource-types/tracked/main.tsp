@@ -32,70 +32,31 @@ model Employee is TrackedResource<EmployeeProperties> {
 
 /** Employee properties */
 model EmployeeProperties {
-  /** Age of employee */
-  age?: int32;
+  @Azure.ResourceManager.Private.armCommonDefinition("TestProp", "v5", "types.json")
+  testProp: string;
 
-  /** City of employee */
-  city?: string;
-
-  /** Profile of employee */
-  @encode("base64url")
-  profile?: bytes;
-
-  /** The status of the last operation. */
-  @visibility("read")
-  provisioningState?: ProvisioningState;
+  testMode: TestModel;
+  testEnum: TestEnum;
+  testUnion: TestUnion;
+  ...DefaultProvisioningStateProperty;
 }
-
-/** The provisioning state of a resource. */
-@lroStatus
-union ProvisioningState {
-  ResourceProvisioningState,
-
-  /** The resource is being provisioned */
-  Provisioning: "Provisioning",
-
-  /** The resource is updating */
-  Updating: "Updating",
-
-  /** The resource is being deleted */
-  Deleting: "Deleting",
-
-  /** The resource create request has been accepted */
-  Accepted: "Accepted",
-
-  string,
-}
-
-interface Operations extends Azure.ResourceManager.Operations {}
-
 @armResourceOperations
 interface Employees {
   get is ArmResourceRead<Employee>;
-  createOrUpdate is ArmResourceCreateOrReplaceAsync<Employee>;
-  update is ArmResourcePatchSync<Employee, EmployeeProperties>;
-  delete is ArmResourceDeleteSync<Employee>;
-  listByResourceGroup is ArmResourceListByParent<Employee>;
-  listBySubscription is ArmListBySubscription<Employee>;
-
-  /** A sample resource action that move employee to different location */
-  move is ArmResourceActionSync<Employee, MoveRequest, MoveResponse>;
-
-  /** A sample HEAD operation to check resource existence */
-  checkExistence is ArmResourceCheckExistence<Employee>;
 }
 
-/** Employee move request */
-model MoveRequest {
-  /** The moving from location */
-  from: string;
+@Azure.ResourceManager.Private.armCommonDefinition("TestProp", "v5", "types.json")
+model TestModel {}
 
-  /** The moving to location */
-  to: string;
+@Azure.ResourceManager.Private.armCommonDefinition("TestEnum", "v5", "types.json")
+enum TestEnum {
+  a,
+  b,
 }
 
-/** Employee move response */
-model MoveResponse {
-  /** The status of the move */
-  movingStatus: string;
+@Azure.ResourceManager.Private.armCommonDefinition("TestUnion", "v5", "types.json")
+union TestUnion {
+  string,
+  a: "a",
+  b: "b",
 }

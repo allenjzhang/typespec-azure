@@ -11,6 +11,7 @@ import {
   Program,
   StringLiteral,
   Tuple,
+  Union,
   getKeyName,
   getTypeName,
 } from "@typespec/compiler";
@@ -166,7 +167,7 @@ function getArmTypesPath(program: Program): string {
 
 function storeCommonTypeRecord(
   context: DecoratorContext,
-  entity: Model | ModelProperty,
+  entity: Model | ModelProperty | Enum | Union,
   kind: "definitions" | "parameters",
   name: string,
   version?: string | EnumValue | ArmCommonTypeVersionSpec,
@@ -217,7 +218,7 @@ export interface ArmCommonTypeRecords {
 
 export function getCommonTypeRecords(
   program: Program,
-  entity: Model | ModelProperty
+  entity: Model | ModelProperty | Enum | Union
 ): ArmCommonTypeRecords {
   return program.stateMap(ArmStateKeys.armCommonDefinitions).get(entity) ?? { records: {} };
 }
@@ -262,11 +263,19 @@ export function $armCommonParameter(
  */
 export function $armCommonDefinition(
   context: DecoratorContext,
-  entity: Model,
+  entity: Model | ModelProperty | Enum | Union,
   definitionName?: string,
   version?: string | EnumValue | ArmCommonTypeVersionSpec,
   referenceFile?: string
 ): void {
+  const { program } = context;
+  if (!entity.name) {
+    reportDiagnostic(program, {
+      code: "arm-common-types-definition-no-anonymous-union",
+      target: entity,
+    });
+    return;
+  }
   // Use the name of the model type if not specified
   if (!definitionName) {
     definitionName = entity.name;

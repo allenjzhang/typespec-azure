@@ -100,6 +100,12 @@ export const $lib = createTypeSpecLibrary({
         default: paramMessage`The template parameter "${"sourceType"}" for "${"entity"}" does not extend the constraint type "${"constraintType"}". ${"actionMessage"}`,
       },
     },
+    "arm-common-types-definition-no-anonymous-union": {
+      severity: "error",
+      messages: {
+        default: `The @armCommonDefinition decorator cannot be applied to anonymous union.`,
+      },
+    },
   },
 });
 

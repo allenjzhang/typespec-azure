@@ -786,7 +786,13 @@ export async function getOpenAPIForService(
       };
     }
 
-    if (isArmCommonType(type) && (type.kind === "Model" || type.kind === "ModelProperty")) {
+    if (
+      isArmCommonType(type) &&
+      (type.kind === "Model" ||
+        type.kind === "ModelProperty" ||
+        type.kind === "Enum" ||
+        type.kind === "Union")
+    ) {
       const ref = getArmCommonTypeOpenAPIRef(program, type, {
         version: context.version,
         service: context.service,
@@ -1721,19 +1727,23 @@ export async function getOpenAPIForService(
 
   function resolveProperty(prop: ModelProperty, context: SchemaContext): OpenAPI2SchemaProperty {
     let propSchema;
-    if (prop.type.kind === "Enum" && prop.defaultValue) {
-      propSchema = getSchemaForEnum(prop.type);
-    } else if (prop.type.kind === "Union" && prop.defaultValue) {
-      const [asEnum, _] = getUnionAsEnum(prop.type);
-      if (asEnum) {
-        propSchema = getSchemaForUnionEnum(prop.type, asEnum);
+    const ref = resolveExternalRef(prop);
+    if (ref) {
+      propSchema = { $ref: ref };
+    } else {
+      if (prop.type.kind === "Enum" && prop.defaultValue) {
+        propSchema = getSchemaForEnum(prop.type);
+      } else if (prop.type.kind === "Union" && prop.defaultValue) {
+        const [asEnum, _] = getUnionAsEnum(prop.type);
+        if (asEnum) {
+          propSchema = getSchemaForUnionEnum(prop.type, asEnum);
+        } else {
+          propSchema = getSchemaOrRef(prop.type, context);
+        }
       } else {
         propSchema = getSchemaOrRef(prop.type, context);
       }
-    } else {
-      propSchema = getSchemaOrRef(prop.type, context);
     }
-
     return applyIntrinsicDecorators(prop, propSchema);
   }
 
